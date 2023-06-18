@@ -1,37 +1,49 @@
-import Section from './Section/Section';
-import Form from './Form/Form';
-import Filter from './Filter/Filter';
-import ContactList from './ContactList/ContactList';
+import { Route, Routes } from 'react-router-dom';
+import SharedLayout from './SharedLayout/SharedLayout';
+import Container from './Container/Container';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchContacts } from 'redux/operations';
-import { getContacts, getError, getIsLoading } from 'redux/selectors';
+import { lazy, useEffect } from 'react';
+import { refreshUser } from 'redux/auth/operations';
+import { getIsRefreshing } from 'redux/auth/selectors';
+
+const Home = lazy(() => import('../pages/Home'));
+const Contacts = lazy(() => import('../pages/Contacts'));
+const Register = lazy(() => import('../pages/Register'));
+const Login = lazy(() => import('../pages/Login'));
 
 export function App() {
   const dispatch = useDispatch();
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
-  const contacts = useSelector(getContacts);
-
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
 
-  return (
-    <>
-      <Section title="Phonebook">
-        <Form />
-      </Section>
+  const isRefreshing = useSelector(getIsRefreshing);
 
-      <Section title="Contacts">
-        <Filter />
-        {isLoading && <h2>Loading...</h2>}
-        {error && <h2>Opps, something went wrong: {error}</h2>}
-        {contacts.length > 0 && !error && <ContactList />}
-        {!isLoading && contacts.length === 0 && (
-          <h4>You have no contacts. Add some in the form above</h4>
-        )}
-      </Section>
-    </>
+  return isRefreshing ? (
+    <Container>
+      <h2>Refreshing user...</h2>
+    </Container>
+  ) : (
+    <Routes>
+      <Route path="/" element={<SharedLayout />}>
+        <Route index element={<Home />} />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute component={<Register />} redirectTo="/contacts" />
+          }
+        />
+        <Route
+          path="/login"
+          element={<PublicRoute component={<Login />} redirectTo="/contacts" />}
+        />
+        <Route
+          path="/contacts"
+          element={<PrivateRoute component={<Contacts />} redirectTo="/" />}
+        />
+      </Route>
+    </Routes>
   );
 }

@@ -1,8 +1,9 @@
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter } from 'redux/selectors';
-import { setFilter } from 'redux/filterSlice';
-import { Div, Input, Label } from './Filter.syled';
+import { getFilter } from 'redux/contactsAndFilter/selectors';
+import { setFilter } from 'redux/contactsAndFilter/filterSlice';
+
+import { Div, Label, Input } from './Filter.syled';
 
 const filterId = nanoid();
 
@@ -11,7 +12,7 @@ const Filter = () => {
   const filter = useSelector(getFilter);
 
   const handleFilterChange = e => dispatch(setFilter(e.target.value));
-  
+
   return (
     <Div>
       <Label htmlFor={filterId}>

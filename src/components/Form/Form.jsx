@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/operations';
-import { getContacts } from 'redux/selectors';
-
-import { FormStyled, Input, Label, Btn } from './Form.styled'
+import { addContact } from 'redux/contactsAndFilter/operations';
+import { getContacts } from 'redux/contactsAndFilter/selectors';
+import { FormStyled, Label, Input, Btn } from './Form.styled';
 
 export default function Form() {
   const [name, setName] = useState('');
@@ -57,12 +56,9 @@ export default function Form() {
 
   return (
     <FormStyled onSubmit={handleSubmit}>
-      <Label htmlFor={nameInputId}>
-        Name
-      </Label>
+      <Label htmlFor={nameInputId}>Name</Label>
 
       <Input
-        
         type="text"
         name="name"
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -73,9 +69,7 @@ export default function Form() {
         id={nameInputId}
       />
 
-      <Label htmlFor={numberInputId}>
-        Number
-      </Label>
+      <Label htmlFor={numberInputId}>Number</Label>
       <Input
         type="tel"
         name="number"
@@ -87,9 +81,7 @@ export default function Form() {
         id={numberInputId}
       />
 
-      <Btn type="submit">
-        Add contact
-      </Btn>
+      <Btn type="submit">Add contact</Btn>
     </FormStyled>
   );
 }

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Container from 'components/Container/Container';
+
 import { Div } from './Section.styled';
 
 const Section = ({ title, children }) => {
@@ -16,6 +17,6 @@ const Section = ({ title, children }) => {
 export default Section;
 
 Section.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   children: PropTypes.any,
 };
